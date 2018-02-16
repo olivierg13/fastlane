@@ -115,7 +115,7 @@ describe Supply do
         expect(client).to receive(:update_track).exactly(2).times
 
         Supply.config = {
-          track: 'alpha'
+          track: 'rollout'
         }
         Supply::Uploader.new.check_superseded_tracks([104])
       end
@@ -154,7 +154,7 @@ describe Supply do
           expect(apk_version_code).to be_empty
         end
 
-        expect(client).to receive(:update_track).exactly(2).times
+        expect(client).to receive(:update_track).exactly(1).times
 
         Supply.config = {
           track: 'beta'

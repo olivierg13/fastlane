@@ -175,12 +175,10 @@ module Supply
       tracks = ["production", "rollout", "beta", "alpha"]
       config_track_index = tracks.index(Supply.config[:track])
 
-      tracks.each_index do |track_index|
-        track = tracks[track_index]
+      tracks.drop(config_track_index).each do |track|
         track_version_codes = client.track_version_codes(track).sort
         UI.verbose("Found '#{track_version_codes}' on track '#{track}'")
 
-        next if track_index.eql?(config_track_index)
         next if track_version_codes.empty?
 
         if max_tracks_version_code.nil?
@@ -188,7 +186,7 @@ module Supply
         end
 
         removed_version_codes = track_version_codes.take_while do |v|
-          v < max_tracks_version_code || (v < max_apk_version_code && track_index > config_track_index)
+          v < max_tracks_version_code || v < max_apk_version_code
         end
 
         next if removed_version_codes.empty?
